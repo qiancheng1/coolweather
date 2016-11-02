@@ -89,7 +89,7 @@ public class CoolWeatherDB {
         }
     }
 
-    public List<City> loadCity() {
+    public List<City> loadCity(int id) {
         List<City> cityList = new ArrayList<>();
         Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf("provinceId")}, null, null, null);
 
@@ -124,7 +124,7 @@ public class CoolWeatherDB {
         }
     }
 
-    public List<County> loadCounty() {
+    public List<County> loadCounty(int id) {
         List<County> countyList = new ArrayList<>(); //jiazai dao zhege biao limian
         County county = new County();
         Cursor cursor = db.query("county", null, "county_id = ?", new String[]{String.valueOf("cityId")}, null, null, null);

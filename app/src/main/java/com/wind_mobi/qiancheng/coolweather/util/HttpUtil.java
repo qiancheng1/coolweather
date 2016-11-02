@@ -15,15 +15,13 @@ import java.net.URL;
  */
 public class HttpUtil {
     URL url= null;
-    private static HttpURLConnection httpURLConnection = null;
 
-    public static void sendHttpRequest(final String address,final HttpCallbackListener listener){
+    public static void sendHttpRequest(final String address,final CallbackListener listener){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String address = null;
+                HttpURLConnection httpURLConnection = null;
                 try {
-
                     URL url = new URL(address);
                     httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
@@ -36,10 +34,17 @@ public class HttpUtil {
                     while ((line = bfRead.readLine()) != null) {
                         stringBuilder.append(line);
                     }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    if (listener != null) {
+                        listener.onFinish(stringBuilder.toString());
+                    }
+                } catch (Exception e) {
+                    if (listener != null) {
+                        listener.onError(e);
+                    }
+                }finally {
+                    if (listener != null) {
+                        httpURLConnection.disconnect();
+                    }
                 }
             }
         }).start();
